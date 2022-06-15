@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Slow Request";
+}
+
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<body id="kt_body" class="cornflowerblue_background">
+
+    <div class="container cornflowerblue_background" style="margin-top:100px">
+
+        <h3 class="textalign control-label"> Slow Request </h3>
+
+        @using (Html.BeginForm("LoadSlowRequest", "Value", FormMethod.Post))
+        {
+            <div align="center">
+                @if (TempData["ValidMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                        <strong>@TempData["ValidMessage"] </strong>
+                    </div>
+                }
+                else if(TempData["InvalidMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                        <strong>@TempData["InvalidMessage"] </strong>
+                    </div>
+                }
+                <select class="apicall" id="teamDropdownSelector" type="text" name="apicall" placeholder="Select an API call">
+                    <option disabled="" selected="">Select an API call</option>
+                    <option value="getusers">/getusers</option>
+                    <option value="gettodos">/gettodos</option>
+                    <option value="getphotos">/getphotos</option>
+                    <option value="getposts">/getposts</option>
+                    <option value="getcomments">/getcomments</option>
+                    <option value="getalbums">/getalbums</option>
+                    <option value="slowrequest">/slowrequest</option>
+                    <option value="badwebrequest">/badwebrequest</option>
+                    <option value="post">/post</option>
+                    <option value="delete">/delete</option>
+                    <option value="put">/put</option>
+                    <option value="patch">/patch</option>
+                </select>
+                <br />
+                <button type="submit"
+                        style="background-color:coral;color:white"
+                        class="btn btn-primary font-weight-bold button-orange"
+                        name="execute">
+                    BAD APP
+                </button>
+            </div>
+        }
+
+    </div>
+
+
+
+</body>
+

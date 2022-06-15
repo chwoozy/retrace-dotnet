@@ -1,0 +1,88 @@
+﻿
+@model Test_WebApplication.Models.ViewModel.RegistrationModel
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<body id="kt_body" class="cornflowerblue_background">
+    @using (Html.BeginForm("SaveRegistration", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container cornflowerblue_background" style="margin-top:100px">
+
+            <h4 class="textalign control-label"> Registration </h4>
+
+            @if (TempData["InvalidMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                    <strong>Error!</strong> <span>@TempData["InvalidMessage"] </span>
+                </div>
+            }
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+
+                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Confirm Password", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" style="background-color:coral;color:white" />
+            </div>
+        </div>
+    }
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript">
+        jQuery('.validatedForm').validate({
+            rules: {
+                password: {
+                    minlength: 5
+                },
+                ConfirmPassword: {
+                    minlength: 5,
+                    equalTo: '[name="password"]'
+                }
+            }
+                    //$("#myForm input.required").change(function () {
+                    //    var valid = true;
+                    //    $.each($("#myForm input.required"), function (index, value) {
+                    //        if (!$(value).val()) {
+                    //            valid = false;
+                    //        }
+                    //    });
+                    //    if (valid) {
+                    //        $(submitButton).attr("disabled", false);
+                    //    }
+                    //    else {
+                    //        $(submitButton).attr("disabled", true);
+                    //    }
+                    //});
+    </script>
+</body>

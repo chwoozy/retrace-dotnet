@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@model Test_WebApplication.Models.DomainModel.ToDoc
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    .displaynone {
+        display: none !important;
+    }
+</style>
+<body id="kt_body" class="cornflowerblue_background">
+    @using (Html.BeginForm("SaveLogin", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="container cornflowerblue_background" style="margin-top:100px">
+
+            <h3 class="textalign control-label"> To-doc </h3>
+            @if (TempData["InvalidMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                    <strong>Error!</strong> <span>@TempData["InvalidMessage"] </span>
+                </div>
+            }
+            <div class="alert alert-success alert-dismissible" role="alert" id="successMsg">
+                <a href="#" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                <strong>Success!</strong> <span id="showcussessmsg"></span>
+            </div>
+            @if (ViewBag.LoadCustomer != null)
+            {
+
+                <div class="row">
+                    @foreach (var item in ViewBag.LoadCustomer)
+                    {
+                        <div class="col-md-12">
+
+                            <label class="form-control" style="margin-bottom:0px !important">
+                                @item.Name
+                                <img src="~/Content/download-icon.png" onclick="$.Rremove.ToDo(this)" data-Id="@item.Id" style="width:10px;height:10px;float:right;margin-top:5px !important" />
+                            </label>
+                        </div>
+
+                    }
+
+
+                </div>
+            }
+            <div class="form-group">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "I need to...." } })
+
+                @*@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "I need to....", @required = "required", @row = "3", @column = "4" } })*@
+
+            </div>
+            <div class="form-group" style="text-align:center">
+                <input type="button" id="btnSave" value="To doc" class="btn btn-default" style="background-color:coral;color:white" />
+
+            </div>
+            <h3 class="textalign control-label"> Resources </h3>
+            <div style=" margin: auto; width: 20%;">
+                <img src="https://www.w3schools.com/tags/img_girl.jpg" alt="Girl in a jacket" width="200" height="300">
+            </div>
+        </div>
+    }
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $("#successMsg").addClass("displaynone");
+            //function will be called on button click having id btnsave
+            $("#btnSave").click(function () {
+                var std = {};
+                std.Name = $("#Name").val();
+                std.Description = $("#Description").val();
+                if (std.Name == '') {
+                    return false;
+                }
+                $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method
+                        url: "Home/SaveToDoc", // Controller/View
+                        data: '{toDoc: ' + JSON.stringify(std) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            
+                            //$("#successMsg").removeClass("displaynone");
+                            //$("#showcussessmsg").html("To do added to list !");
+                            // alert("Data has been added successfully.");
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Error while inserting data");
+                        }
+
+                    });
+                return false;
+            });
+            $.Rremove = {
+                ToDo: function (ele) {
+                    var id = $(ele).attr('data-Id');
+                    $.ajax(
+                        {
+                            type: "POST", //HTTP POST Method
+                            url: "Home/RemoveToDoc", // Controller/View
+                            data: {id: id},
+                            success: function (data) {
+                                
+                                if (data.Message == true) {
+                                    location.reload();
+                                    //$("#successMsg").removeClass("displaynone");
+                                    //$("#showcussessmsg").html("To do removed from list !");
+                                    // alert("Data has been added successfully.");
+                                   
+                                }
+                            },
+                            error: function () {
+                                alert("Error while inserting data");
+                            }
+
+                        });
+                }
+            }
+        });
+    </script>
+
+</body>
